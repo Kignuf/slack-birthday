@@ -1,0 +1,17 @@
+{
+  "name": "slack-birthday",
+  "version": "0.0.0",
+  "description": "A small backend to handle /birthday commands in slack and notify when it's someone's birthday",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "slack"
+  ],
+  "author": "Kevin Roulleau",
+  "license": "ISC",
+  "dependencies": {
+    "restify": "^4.1.1"
+  }
+}
