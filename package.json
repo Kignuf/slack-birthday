@@ -12,6 +12,8 @@
   "author": "Kevin Roulleau",
   "license": "ISC",
   "dependencies": {
+    "node-schedule": "^1.1.1",
+    "request": "^2.74.0",
     "restify": "^4.1.1"
   }
 }

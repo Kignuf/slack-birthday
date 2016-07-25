@@ -2,6 +2,7 @@ var restify = require('restify');
 var server = restify.createServer();
 server.name = 'Slack Birthday';
 var fs = require('fs');
+var request = require('request');
 
 // load config file
 try {
@@ -23,7 +24,7 @@ try {
 	});
 }
 
-server.listen(8080, function(){
+server.listen(80, function(){
 	console.log('%s listening at %s', server.name, server.url);
 });
 
@@ -37,7 +38,7 @@ server.get('/', function(req, res, next){
 server.post('/',
 	// verify query comes from the right slash integration
 	function(req, res, next){
-		if( req.body.token === slack.token ){
+		if( req.body.token === slack.slash_token ){
 			next();
 		} else {
 			res.status(401).send('Wrong token');
@@ -51,3 +52,41 @@ server.post('/',
 
 
 // ===== Notify slack chat room ===== //
+var job = schedule.scheduleJob({
+	hour: slack.notification_hour,
+	minute: slack.notification_minute
+}, checkAndNotify);
+
+function checkAndNotify(){
+	// 1. check birthdays  and populate an array of matches
+	var matches = [];
+	var today = new Date();
+
+	data.forEach(function(member){
+		var birthday = new Date(member.birthday);
+		if(birthday.getDate() === today.getDate() && birthday.getMonth() === today.getMonth()){
+			matches.push(member);
+		}
+	});
+
+	// 2. build message
+	if (matches.length >0){
+		var msg = '';
+		matches.forEach(function(match){
+			msg += 'It\'s ' +match.name+ '\'s birthday ! \n';
+		});
+
+		// 3. send message to slack
+		var options = {
+			url: slack.incoming_webhook_url,
+			body: JSON.stringify({text: msg})
+		};
+		request.post(options, function(err, httpResponse, body){
+			if(err){
+				console.error('Could not post birthdays to slack', err);
+			} else {
+				console.log('Successfully posted birthdays to slack');
+			}
+		});
+	}
+}

@@ -1,3 +1,6 @@
 {
-	"token": "copy paste your slash command token here"
+	"slash_token": "copy paste your slash command token here",
+	"incoming_webhook_url": "https://hooks.slack.com/services/.../...",
+	"notification_hour": 10,
+	"notification_minute": 0
 }
