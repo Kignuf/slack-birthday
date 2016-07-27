@@ -25,6 +25,9 @@ try {
 	});
 }
 
+// modules
+server.use(restify.bodyParser({mapParams: true}));
+
 server.listen(80, function(){
 	console.log('%s listening at %s', server.name, server.url);
 });
@@ -39,10 +42,11 @@ server.get('/', function(req, res, next){
 server.post('/',
 	// verify query comes from the right slash integration
 	function(req, res, next){
-		if( req.body.token === slack.slash_token ){
+		if( req.params.token === slack.slash_token ){
 			next();
 		} else {
-			res.status(401).send('Wrong token');
+			res.status(401);
+			res.send('Wrong token');
 		}
 	},
 	// deal with query
