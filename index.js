@@ -3,6 +3,7 @@ var server = restify.createServer();
 server.name = 'Slack Birthday';
 var fs = require('fs');
 var request = require('request');
+var schedule = require('node-schedule');
 
 // load config file
 try {
